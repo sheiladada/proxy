@@ -29,8 +29,8 @@ class ConexaoAtual:
     self.__roteadoresAtivos[ipRoteadorDestino].append(portaRoteadorDestino)
     self.__clientesAtivos[ipCliente][portaCliente] = [ipRoteadorOrigem, ipRoteadorDestino, portaRoteadorDestino, portaClienteDestino]
 
-  def printRoteadoresAtivos(self):
-    print self.__roteadoresAtivos
+  def getRoteadoresAtivos(self):
+    return self.__roteadoresAtivos
 
-  def printClientesAtivos(self):
-    print self.__clientesAtivos
+  def getClientesAtivos(self):
+    return self.__clientesAtivos
