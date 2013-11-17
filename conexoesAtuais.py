@@ -17,8 +17,8 @@ class ConexaoAtual:
       elif not self.__clientesAtivos.has_key(ipCliente):
         self.__clientesAtivos[ipCliente]={}
 
-      # ou não tem a chave cliente no primeiro dicionario ou não tem a porta cliente
-      # Ver se a porta ativa do roteador não é a mesma que eu quero colocar, se for, não adiciona nada
+      #ou não tem a chave cliente no primeiro dicionario ou não tem a porta cliente
+      #Ver se a porta ativa do roteador não é a mesma que eu quero colocar, se for, não adiciona nada
       if self.__roteadoresAtivos.has_key(ipRoteadorDestino):
         #lista de portas que estão sendo usadas
         for porta in self.__roteadoresAtivos[ipRoteadorDestino]: 
