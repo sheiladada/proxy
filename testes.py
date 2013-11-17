@@ -71,4 +71,15 @@ try:
   #{'10.0.0.1': {11112: ['192.168.0.1', '192.168.0.2', 22221, 33333]}}
   #{'192.168.0.2': [22221]}
 except Exception, err:
-  sys.stderr.write('ERRO: %s\n' % str(err)) 
+  sys.stderr.write('ERRO: %s\n' % str(err))
+  print("Não foi deletada a conexão. Código incorreto.")
+
+#deleta conexão com porta que não está no dicionário
+try:
+  conexoes.deletarConexao('10.0.0.1', 11113)
+  print("Foi deletada conexão inexistente. Código incorreto.")
+except Exception, err:
+  sys.stderr.write('ERRO: %s\n' % str(err))
+  print("Não foi deletada conexão. Código correto.")
+  #{'10.0.0.1': {11112: ['192.168.0.1', '192.168.0.2', 22221, 33333]}}
+  #{'192.168.0.2': [22221]}
