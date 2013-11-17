@@ -6,12 +6,19 @@ import sys
 
 conexoes = conexoesAtuais.ConexaoAtual()
 
+#conexões ativas: '10.0.0.1', 11111, '192.168.0.1', '192.168.0.2', 22222, 33333;
+#10.0.0.1', 11112, '192.168.0.1', '192.168.0.2', 22221, 33333
+#{'192.168.0.2': [22222, 22221]}
+
+
 #adicionarConexao(self, ipCliente, portaCliente, ipRoteadorOrigem, ipRoteadorDestino, portaRoteadorDestino, portaClienteDestino)
 try:
   conexoes.adicionarConexao('10.0.0.1', 11111, '192.168.0.1', '192.168.0.2', 22222, 33333)
   print "Código correto"
   conexoes.printClientesAtivos()
   conexoes.printRoteadoresAtivos()
+  #{'10.0.0.1': {11111: ['192.168.0.1', '192.168.0.2', 22222, 33333]}}
+  #{'192.168.0.2': [22222]}
 except Exception, err:
   sys.stderr.write('ERRO: %s\n' % str(err)) 
   print ("Não foi adicionada conexão. Código incorreto")
@@ -22,6 +29,8 @@ try:
   print "Código correto"
   conexoes.printClientesAtivos()
   conexoes.printRoteadoresAtivos()
+  #{'10.0.0.1': {11112: ['192.168.0.1', '192.168.0.2', 22221, 33333], 11111: ['192.168.0.1', '192.168.0.2', 22222, 33333]}}
+  #{'192.168.0.2': [22222, 22221]}
 except Exception, err:
   sys.stderr.write('ERRO: %s\n' % str(err)) 
   print ("Não foi adicionada conexão. Código incorreto")
@@ -37,6 +46,8 @@ except Exception, err:
   print ("Não foi adicionada conexão. Código correto.")
   conexoes.printClientesAtivos()
   conexoes.printRoteadoresAtivos()
+  #{'10.0.0.1': {11112: ['192.168.0.1', '192.168.0.2', 22221, 33333], 11111: ['192.168.0.1', '192.168.0.2', 22222, 33333]}}
+  #{'192.168.0.2': [22222, 22221]}
 
 #adiciona conexão para a mesma porta roteador destino, deve dar erro
 try:
@@ -49,3 +60,13 @@ except Exception, err:
   print ("Não foi adicionada conexão. Código correto")
   conexoes.printClientesAtivos()
   conexoes.printRoteadoresAtivos()
+  #{'10.0.0.1': {11112: ['192.168.0.1', '192.168.0.2', 22221, 33333], 11111: ['192.168.0.1', '192.168.0.2', 22222, 33333]}}
+  #{'192.168.0.2': [22222, 22221]}
+
+#deleta conexão normalmente
+try:
+  conexoes.deletarConexao('10.0.0.1', 11111)
+  conexoes.printClientesAtivos()
+  conexoes.printRoteadoresAtivos()
+except Exception, err:
+  sys.stderr.write('ERRO: %s\n' % str(err)) 
