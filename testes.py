@@ -68,5 +68,7 @@ try:
   conexoes.deletarConexao('10.0.0.1', 11111)
   conexoes.printClientesAtivos()
   conexoes.printRoteadoresAtivos()
+  #{'10.0.0.1': {11112: ['192.168.0.1', '192.168.0.2', 22221, 33333]}}
+  #{'192.168.0.2': [22221]}
 except Exception, err:
   sys.stderr.write('ERRO: %s\n' % str(err)) 
