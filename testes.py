@@ -30,14 +30,14 @@ testesfuncoes.testeAdicionarConexao('10.0.0.1', 11113, '192.168.0.1', '192.168.0
 #deleta conexão normalmente
 respostaEsperadaCliente = {'10.0.0.1': {11112: ['192.168.0.1', '192.168.0.2', 22221, 33333]}}
 respostaEsperadaRot = {'192.168.0.2': [22221]}
-testesfuncoes.testeAdicionarConexao('10.0.0.1', 11111, respostaEsperadaCliente, respostaEsperadaRot)
+testesfuncoes.testeDeletarConexao('10.0.0.1', 11111, respostaEsperadaCliente, respostaEsperadaRot)
 
 #deleta conexão com porta que não está no dicionário
 respostaEsperadaCliente = {'10.0.0.1': {11112: ['192.168.0.1', '192.168.0.2', 22221, 33333]}}
 respostaEsperadaRot = {'192.168.0.2': [22221]}
-testesfuncoes.testeAdicionarConexao('10.0.0.1', 11113, respostaEsperadaCliente, respostaEsperadaRot)
+testesfuncoes.testeDeletarConexao('10.0.0.1', 11113, respostaEsperadaCliente, respostaEsperadaRot)
 
 #deleta conexão com porta que não está no dicionário
 respostaEsperadaCliente = {'10.0.0.1': {11112: ['192.168.0.1', '192.168.0.2', 22221, 33333]}}
 respostaEsperadaRot = {'192.168.0.2': [22221]}
-testesfuncoes.testeAdicionarConexao('10.0.0.1', 11112, respostaEsperadaCliente, respostaEsperadaRot)
+testesfuncoes.testeDeletarConexao('10.0.0.1', 11112, respostaEsperadaCliente, respostaEsperadaRot)
