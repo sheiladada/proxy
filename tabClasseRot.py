@@ -9,3 +9,4 @@ class TabelaClasseRoteador():
   def deletarRotClasse(self, classeIP, IPRoteador):
   def listarRotClasse(self, classeIP):
   def getTabClasseRot(self):
+    return self.__tabelaClasseRot
