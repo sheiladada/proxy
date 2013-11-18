@@ -37,7 +37,12 @@ respostaEsperadaCliente = {'10.0.0.1': {11112: ['192.168.0.1', '192.168.0.2', 22
 respostaEsperadaRot = {'192.168.0.2': [22221]}
 testesfuncoes.testeDeletarConexao('10.0.0.1', 11113, respostaEsperadaCliente, respostaEsperadaRot)
 
-#deleta conexão com porta que não está no dicionário
+#deleta conexão com ip cliente que não está no dicionário
 respostaEsperadaCliente = {'10.0.0.1': {11112: ['192.168.0.1', '192.168.0.2', 22221, 33333]}}
 respostaEsperadaRot = {'192.168.0.2': [22221]}
+testesfuncoes.testeDeletarConexao('10.0.0.2', 11113, respostaEsperadaCliente, respostaEsperadaRot)
+
+#deleta conexão com porta que não está no dicionário
+respostaEsperadaCliente = {}
+respostaEsperadaRot = {}
 testesfuncoes.testeDeletarConexao('10.0.0.1', 11112, respostaEsperadaCliente, respostaEsperadaRot)

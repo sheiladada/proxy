@@ -32,19 +32,19 @@ class ConexaoAtual:
   def deletarConexao(self, ipCliente, portaCliente):
 
     if not self.__clientesAtivos.has_key(ipCliente):
-      raise RuntimeError('Não existe conexão para este IP Cliente')
+      raise RuntimeError('Não existe conexão para este IP Cliente.')
     elif not self.__clientesAtivos[ipCliente].has_key(portaCliente):
-      raise RuntimeError('Não existe conexão para este para esta porta de IP Cliente')
+      raise RuntimeError('Não existe conexão para este para esta porta de IP Cliente.')
     else:
       #Conexão caracterizada por: {'10.0.0.1': {11112: ['192.168.0.1', '192.168.0.2', 22221, 33333]}}, 22221 é a porta do roteador destino
       ipRoteador = self.__clientesAtivos[ipCliente][portaCliente][1]
       portaRoteador =  self.__clientesAtivos[ipCliente][portaCliente][2]
       if not self.__roteadoresAtivos.has_key(ipRoteador):
-        raise RuntimeError('Não existe conexão para o IP roteador especificado, inconsistência de dados')
+        raise RuntimeError('Não existe conexão para o IP roteador especificado, inconsistência de dados.')
       elif not portaRoteador in self.__roteadoresAtivos[ipRoteador]:
-        raise RuntimeError('Não existe conexão para a porta do roteador especificado, inconsistência de dados')
+        raise RuntimeError('Não existe conexão para a porta do roteador especificado, inconsistência de dados.')
       else:
-        self.__roteadoresAtivos[ipRoteador].remove(porta)
+        self.__roteadoresAtivos[ipRoteador].remove(portaRoteador)
         #lista vazia, apaga a chave do roteador
         if not self.__roteadoresAtivos[ipRoteador]:
           del self.__roteadoresAtivos[ipRoteador]
