@@ -8,3 +8,4 @@ class TabelaClasseRoteador():
   def adicionarRotClasse(self, classeIP, IPRoteador):
   def deletarRotClasse(self, classeIP, IPRoteador):
   def listarRotClasse(self, classeIP):
+  def getTabClasseRot(self):
