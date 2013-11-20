@@ -20,5 +20,5 @@ def testeDeletarRotClasse(classeIP, IPRoteador, tabelaEsperada):
 def testeListarRotClasse(classeIP, listaEsperada):
   tabela = tabClasseRot.TabelaClasseRoteador()
   listaObtida = tabela.listarRotClasse(classeIP)
-  if listaObtida != tabelaEsperada:
+  if listaObtida != listaEsperada:
     print "testeListarRotClasse", classeIP, IPRoteador, "falhou, resposta esperada:", tabelaEsperada, "resposta dada:", tabela.getTabClasseRot()

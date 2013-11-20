@@ -28,6 +28,8 @@ class TabelaClasseRoteador():
     else:
       print "Não há registro de roteadores para a classe", classeIP
 
-#  def listarRotClasse(s elf, classeIP):
+  def listarRotClasse(self, classeIP):
+      return self.__tabelaClasseRot.get(classeIP,[])
+
   def getTabClasseRot(self):
     return self.__tabelaClasseRot
