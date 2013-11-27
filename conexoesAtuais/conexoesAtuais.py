@@ -9,7 +9,7 @@ class ConexaoAtual:
 #  def __init__():
 
 #FALTA AQUI IP CLIENTE DESTINO
-  def adicionarConexao(self, ipCliente, portaCliente, ipRoteadorOrigem, ipRoteadorDestino, portaRoteadorDestino, portaClienteDestino):
+  def adicionarConexao(self, ipCliente, portaCliente, ipRoteadorOrigem, ipRoteadorDestino, portaRoteadorDestino, ipClienteDestino portaClienteDestino):
 
     #tem a chave, esse cliente já possui
     if self.__clientesAtivos.get(ipCliente) is not None and self.__clientesAtivos[ipCliente].has_key(portaCliente):
@@ -28,7 +28,7 @@ class ConexaoAtual:
       self.__roteadoresAtivos[ipRoteadorDestino] = []
       #a porta não foi utilizada, adiciono nas portas ativas do roteador e adiciono a conexão nos clientes ativos
     self.__roteadoresAtivos[ipRoteadorDestino].append(portaRoteadorDestino)
-    self.__clientesAtivos[ipCliente][portaCliente] = [ipRoteadorOrigem, ipRoteadorDestino, portaRoteadorDestino, portaClienteDestino]
+    self.__clientesAtivos[ipCliente][portaCliente] = [ipRoteadorOrigem, ipRoteadorDestino, portaRoteadorDestino, ipClienteDestino, portaClienteDestino]
 
   def deletarConexao(self, ipCliente, portaCliente):
 
