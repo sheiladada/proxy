@@ -8,6 +8,7 @@ class ConexaoAtual:
 
 #  def __init__():
 
+#FALTA AQUI IP CLIENTE DESTINO
   def adicionarConexao(self, ipCliente, portaCliente, ipRoteadorOrigem, ipRoteadorDestino, portaRoteadorDestino, portaClienteDestino):
 
     #tem a chave, esse cliente já possui
