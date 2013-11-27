@@ -4,10 +4,10 @@
 import conexoesAtuais
 import sys
 
-def testeAdicionarConexao(ipCliente, portaCliente, ipRoteadorOrigem, ipRoteadorDestino, portaRoteadorDestino,ipClienteDestino portaClienteDestino, respostaEsperadaCliente, respostaEsperadaRot):
+def testeAdicionarConexao(ipCliente, portaCliente, ipRoteadorOrigem, ipRoteadorDestino, portaRoteadorDestino,ipClienteDestino, portaClienteDestino, respostaEsperadaCliente, respostaEsperadaRot):
   conexoes = conexoesAtuais.ConexaoAtual()
   try:
-    conexoes.adicionarConexao( ipCliente, portaCliente, ipRoteadorOrigem, ipRoteadorDestino, portaRoteadorDestino,ipClienteDestino portaClienteDestino)
+    conexoes.adicionarConexao( ipCliente, portaCliente, ipRoteadorOrigem, ipRoteadorDestino, portaRoteadorDestino,ipClienteDestino, portaClienteDestino)
   except Exception, err:
     sys.stderr.write('EXCEÇÃO: %s\n' % str(err)) 
   if (conexoes.getClientesAtivos() != respostaEsperadaCliente):

@@ -9,7 +9,7 @@ class ConexaoAtual:
 #  def __init__():
 
 #FALTA AQUI IP CLIENTE DESTINO
-  def adicionarConexao(self, ipCliente, portaCliente, ipRoteadorOrigem, ipRoteadorDestino, portaRoteadorDestino, ipClienteDestino portaClienteDestino):
+  def adicionarConexao(self, ipCliente, portaCliente, ipRoteadorOrigem, ipRoteadorDestino, portaRoteadorDestino, ipClienteDestino, portaClienteDestino):
 
     #tem a chave, esse cliente já possui
     if self.__clientesAtivos.get(ipCliente) is not None and self.__clientesAtivos[ipCliente].has_key(portaCliente):
