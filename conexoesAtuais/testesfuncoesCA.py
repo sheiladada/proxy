@@ -4,16 +4,16 @@
 import conexoesAtuais
 import sys
 
-def testeAdicionarConexao(ipCliente, portaCliente, ipRoteadorOrigem, ipRoteadorDestino, portaRoteadorDestino,ipClienteDestino, portaClienteDestino, respostaEsperadaCliente, respostaEsperadaRot):
+def testeAdicionarConexao(ipCliente, portaCliente, ipRoteadorOrigem, portaRoteadorOrigem,ipRoteadorDestino, portaRoteadorDestino,ipClienteDestino, portaClienteDestino, respostaEsperadaCliente, respostaEsperadaRot):
   conexoes = conexoesAtuais.ConexaoAtual()
   try:
-    conexoes.adicionarConexao( ipCliente, portaCliente, ipRoteadorOrigem, ipRoteadorDestino, portaRoteadorDestino,ipClienteDestino, portaClienteDestino)
+    conexoes.adicionarConexao( ipCliente, portaCliente, ipRoteadorOrigem,portaRoteadorOrigem, ipRoteadorDestino, portaRoteadorDestino,ipClienteDestino, portaClienteDestino)
   except Exception, err:
     sys.stderr.write('EXCEÇÃO: %s\n' % str(err)) 
   if (conexoes.getClientesAtivos() != respostaEsperadaCliente):
-    print "testeAdicionarConexao", ipCliente, portaCliente, ipRoteadorOrigem, ipRoteadorDestino, portaRoteadorDestino, portaClienteDestino, "falhou, resposta esperada: ", respostaEsperadaCliente, " resposta dada: ", conexoes.getClientesAtivos()
+    print "testeAdicionarConexao", ipCliente, portaCliente, ipRoteadorOrigem, portaRoteadorOrigem ipRoteadorDestino, portaRoteadorDestino, portaClienteDestino, "falhou, resposta esperada: ", respostaEsperadaCliente, " resposta dada: ", conexoes.getClientesAtivos()
   if(conexoes.getRoteadoresAtivos() != respostaEsperadaRot):
-    print "testeAdicionarConexao", ipCliente, portaCliente, ipRoteadorOrigem, ipRoteadorDestino, portaRoteadorDestino, portaClienteDestino, "falhou, resposta esperada: ", respostaEsperadaRot, " resposta dada: ", conexoes.getRoteadoresAtivos()
+    print "testeAdicionarConexao", ipCliente, portaCliente, ipRoteadorOrigem,portaRoteadorOrigem, ipRoteadorDestino, portaRoteadorDestino, portaClienteDestino, "falhou, resposta esperada: ", respostaEsperadaRot, " resposta dada: ", conexoes.getRoteadoresAtivos()
 
 def testeDeletarConexao(ipCliente, portaCliente, respostaEsperadaCliente, respostaEsperadaRot):
   conexoes = conexoesAtuais.ConexaoAtual()
