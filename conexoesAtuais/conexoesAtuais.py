@@ -9,7 +9,7 @@ class ConexaoAtual:
 #  def __init__():
 
 #FALTA AQUI IP CLIENTE DESTINO
-  def adicionarConexao(self, ipCliente, portaCliente, ipRoteadorOrigem, ipRoteadorDestino, portaRoteadorDestino, ipClienteDestino, portaClienteDestino):
+  def adicionarConexao(self, ipCliente, portaCliente, ipRoteadorOrigem,portaRoteadorOrigem, ipRoteadorDestino, portaRoteadorDestino, ipClienteDestino, portaClienteDestino):
 
     #tem a chave, esse cliente já possui
     if self.__clientesAtivos.get(ipCliente) is not None and self.__clientesAtivos[ipCliente].has_key(portaCliente):
@@ -26,8 +26,17 @@ class ConexaoAtual:
           raise RuntimeError('Porta do roteador destino ocupada.')
     else:
       self.__roteadoresAtivos[ipRoteadorDestino] = []
+
+    if self.__roteadoresAtivos.has_key(ipRoteadorOrigem):
+      #lista de portas que estão sendo usadas
+      for porta in self.__roteadoresAtivos[ipRoteadorOrigem]: 
+        if porta == portaRoteadorOrigem:
+          raise RuntimeError('Porta do roteador origem ocupada.')
+    else:
+      self.__roteadoresAtivos[ipRoteadorOrigem] = []
       #a porta não foi utilizada, adiciono nas portas ativas do roteador e adiciono a conexão nos clientes ativos
     self.__roteadoresAtivos[ipRoteadorDestino].append(portaRoteadorDestino)
+    self.__roteadoresAtivos[ipRoteadorOrigem].append(portaRoteadorOrigem)
     self.__clientesAtivos[ipCliente][portaCliente] = [ipRoteadorOrigem, ipRoteadorDestino, portaRoteadorDestino, ipClienteDestino, portaClienteDestino]
 
   def deletarConexao(self, ipCliente, portaCliente):
