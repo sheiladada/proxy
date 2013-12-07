@@ -4,24 +4,24 @@
 import conexoesAtuais
 import sys
 
-def testeAdicionarConexao(ipCliente, portaCliente, ipRoteadorOrigem, portaRoteadorOrigem,ipRoteadorDestino, portaRoteadorDestino,ipClienteDestino, portaClienteDestino, respostaEsperadaCliente, respostaEsperadaRot):
+def testeAdicionarConexao(ipCliente,ipRoteadorOrigem, portaRoteadorOrigem,ipRoteadorDestino, portaRoteadorDestino,ipClienteDestino, portaClienteDestino, respostaEsperadaCliente, respostaEsperadaRot):
   conexoes = conexoesAtuais.ConexaoAtual()
   try:
-    conexoes.adicionarConexao( ipCliente, portaCliente, ipRoteadorOrigem,portaRoteadorOrigem, ipRoteadorDestino, portaRoteadorDestino,ipClienteDestino, portaClienteDestino)
+    conexoes.adicionarConexao( ipCliente,ipRoteadorOrigem,portaRoteadorOrigem, ipRoteadorDestino, portaRoteadorDestino,ipClienteDestino, portaClienteDestino)
   except Exception, err:
     sys.stderr.write('EXCEÇÃO: %s\n' % str(err)) 
   if (conexoes.getClientesAtivos() != respostaEsperadaCliente):
-    print "testeAdicionarConexao", ipCliente, portaCliente, ipRoteadorOrigem, portaRoteadorOrigem, ipRoteadorDestino, portaRoteadorDestino, portaClienteDestino, "falhou, resposta esperada: ", respostaEsperadaCliente, " resposta dada: ", conexoes.getClientesAtivos()
+    print "testeAdicionarConexao", ipCliente, ipRoteadorOrigem, portaRoteadorOrigem, ipRoteadorDestino, portaRoteadorDestino, portaClienteDestino, "falhou, resposta esperada: ", respostaEsperadaCliente, " resposta dada: ", conexoes.getClientesAtivos()
   if(conexoes.getRoteadoresAtivos() != respostaEsperadaRot):
-    print "testeAdicionarConexao", ipCliente, portaCliente, ipRoteadorOrigem,portaRoteadorOrigem, ipRoteadorDestino, portaRoteadorDestino, portaClienteDestino, "falhou, resposta esperada: ", respostaEsperadaRot, " resposta dada: ", conexoes.getRoteadoresAtivos()
+    print "testeAdicionarConexao", ipCliente, ipRoteadorOrigem,portaRoteadorOrigem, ipRoteadorDestino, portaRoteadorDestino, portaClienteDestino, "falhou, resposta esperada: ", respostaEsperadaRot, " resposta dada: ", conexoes.getRoteadoresAtivos()
 
-def testeDeletarConexao(ipCliente, portaCliente, respostaEsperadaCliente, respostaEsperadaRot):
+def testeDeletarConexao(ipCliente, ipRO, portaRO, respostaEsperadaCliente, respostaEsperadaRot):
   conexoes = conexoesAtuais.ConexaoAtual()
   try:
-    conexoes.deletarConexao(ipCliente, portaCliente)
+    conexoes.deletarConexao(ipCliente, ipRO, portaRO)
   except Exception, err:
     sys.stderr.write('EXCEÇÃO: %s\n' % str(err)) 
   if (conexoes.getClientesAtivos() != respostaEsperadaCliente):
-    print "testeDeletarConexao", ipCliente, portaCliente,  "falhou, resposta esperada: ", respostaEsperadaCliente, " resposta dada: ", conexoes.getClientesAtivos()
+    print "testeDeletarConexao", ipCliente, ipRO, portaRO,  "falhou, resposta esperada: ", respostaEsperadaCliente, " resposta dada: ", conexoes.getClientesAtivos()
   if(conexoes.getRoteadoresAtivos() != respostaEsperadaRot):
-    print "testeDeletarConexao", ipCliente, portaCliente, "falhou, resposta esperada: ", respostaEsperadaRot, " resposta dada: ", conexoes.getRoteadoresAtivos()
+    print "testeDeletarConexao", ipCliente, ipRO, portaRO, "falhou, resposta esperada: ", respostaEsperadaRot, " resposta dada: ", conexoes.getRoteadoresAtivos()
