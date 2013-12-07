@@ -8,15 +8,16 @@ class ConexaoAtual:
 
 #  def __init__():
 
-#FALTA AQUI IP CLIENTE DESTINO
   def adicionarConexao(self, ipCliente,ipRoteadorOrigem,portaRO, ipRoteadorDestino, portaRoteadorDestino, ipClienteDestino, portaClienteDestino):
 
     #tem a chave, esse cliente já possui
     if self.__clientesAtivos.has_key(ipCliente) and self.__clientesAtivos[ipCliente].has_key(ipRoteadorOrigem) and self.__clientesAtivos[ipCliente][ipRoteadorOrigem].has_key(portaRO):
       raise RuntimeError('Conexão já existente.')
-    elif not self.__clientesAtivos.has_key(ipCliente):
-      self.__clientesAtivos[ipCliente]={}
 
+    if not self.__clientesAtivos.has_key(ipCliente):
+      self.__clientesAtivos[ipCliente]={}
+    if not self.__clientesAtivos[ipCliente].has_key(ipRoteadorOrigem):
+      self.__clientesAtivos[ipCliente][ipRoteadorOrigem] = {}
     #ou não tem a chave cliente no primeiro dicionario ou não tem a porta cliente
     #Ver se a porta ativa do roteador não é a mesma que eu quero colocar, se for, não adiciona nada
     if self.__roteadoresAtivos.has_key(ipRoteadorDestino):
@@ -37,7 +38,7 @@ class ConexaoAtual:
       #a porta não foi utilizada, adiciono nas portas ativas do roteador e adiciono a conexão nos clientes ativos
     self.__roteadoresAtivos[ipRoteadorDestino].append(portaRoteadorDestino)
     self.__roteadoresAtivos[ipRoteadorOrigem].append(portaRO)
-    self.__clientesAtivos[ipRoteadorOrigem][portaRO] = [ipRoteadorDestino, portaRoteadorDestino, ipClienteDestino, portaClienteDestino]
+    self.__clientesAtivos[ipCliente][ipRoteadorOrigem][portaRO] =[ipRoteadorDestino, portaRoteadorDestino, ipClienteDestino, portaClienteDestino]
 
   def deletarConexao(self, ipCliente, ipRO, portaRO):
 
@@ -57,7 +58,7 @@ class ConexaoAtual:
         raise RuntimeError('Não existe conexão para a porta do roteador destino especificado, inconsistência de dados.')
       elif not self.__roteadoresAtivos.has_key(ipRO):
         raise RuntimeError('Não existe conexão para o IP roteador origem especificado, inconsistência de dados.')
-      elif not portaRoteadorOrg in self.__roteadoresAtivos[ipRO]:
+      elif not portaRO in self.__roteadoresAtivos[ipRO]:
         raise RuntimeError('Não existe conexão para a porta do roteador origem especificado, inconsistência de dados.')
       else:
         self.__roteadoresAtivos[ipRoteador].remove(portaRoteador)
