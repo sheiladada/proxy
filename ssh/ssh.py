@@ -7,17 +7,17 @@ class Ssh():
 
   __conexaoSsh = {}
 
-  def adicionar(self, ip, senha, usuario):
+  def adicionar(self, ip, usuario, senha):
     if self.__conexaoSsh.has_key(ip):
-      self.conexaoSsh[ip][2].close()
+      self.__conexaoSsh[ip][2].close()
     ssh = paramiko.SSHClient()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     ssh.connect(ip,port=222,username=usuario,password=senha)
-    conexaoSsh[ip]=[usuario, senha, ssh]
+    self.__conexaoSsh[ip]=[usuario, senha, ssh]
 
   def fechar(self, ip):
-    self.conexaoSsh[ip][2].close()
-    del conexaoSsh[ip]
+    self.__conexaoSsh[ip][2].close()
+    del self.__conexaoSsh[ip]
 
   def fecharTodos(self):
     for senha, usuario, conexao in self.__conexaoSsh.values():
@@ -28,5 +28,5 @@ class Ssh():
     return self.__conexaoSsh
 
   def getConexao(self, ip):
-    return return self.__conexaoSsh[ip][2]
+    return self.__conexaoSsh[ip][2]
 
