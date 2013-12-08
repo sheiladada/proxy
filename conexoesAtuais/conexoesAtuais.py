@@ -80,5 +80,13 @@ class ConexaoAtual:
   def getRoteadoresAtivos(self):
     return self.__roteadoresAtivos
 
+  def getRoteadorAtivo(self, ipCliente, ipRO, portaRO):
+    lista = [ipCliente, ipRO, portaRO]
+    if self.__roteadoresAtivos.has_key(ipCliente) and self.__roteadoresAtivos[ipCliente].has_key(ipRO) and self.__roteadoresAtivos[ipCliente][ipRO].has_key(portaRO):
+      lista = lista.append(self.__roteadoresAtivos[ipCliente][ipRO][portaRO])
+    else:
+      lista = [] 
+    return lista
+
   def getClientesAtivos(self):
     return self.__clientesAtivos

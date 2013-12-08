@@ -22,8 +22,8 @@ sshD = paramiko.SSHClient()
 sshD.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 sshD.connect(rotD,port=222,username='root',password='Iptv092012')
 
-comandos.escreveRegras(ipO,rotO,portaLO,rotD, portaLD, ipD,portaD, sshO, sshD)
-
+comandos.escreveRegras(ipO,rotO,portaLO,rotD, portaLD, ipD,portaD, sshO, sshD, '-A')
+comandos.escreveRegras(ipO,rotO,portaLO,rotD, portaLD, ipD,portaD, sshO, sshD, '-D')
 # No fim vou ter regras no roteador cliente:
 #"iptables -t -nat -A PREROUTING -s 10.0.0.253 -d 192.168.0.69 -p tcp  --dport 33333 -i $GREEN_DEV -j DNAT --to 192.168.0.31:33331"
 #"iptables -t -nat -A POSTROUTING -s 10.0.0.253 -d 192.168.0.31 -p tcp -o $RED_DEV -j SNAT --to-source 192.168.0.69"

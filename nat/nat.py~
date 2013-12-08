@@ -21,38 +21,31 @@ class Nat:
 #precisa passar no ipOrigem e lista destino o IP e a máscara
   def criar(self, ipOrigem, listaDestino):
 
-    rotDestino = []
-
-    conexoes = conexoesAtuais.ConexaoAtual()
+    listaRotPorta = []
     tabelaClRot = tabClasseRot.TabelaClasseRoteador()
-    # cmdRot faz comandos no roteador
-    cmdRot = cmdRoteador.CmdRot()
-    #conexao ssh, considera que todos os roteadores já estão conectados
-    sshConexao = ssh.Ssh()
 
     ipOrg = netaddr.IPNetwork(ipOrigem)
-    rotProximos = tabelaClRot.get(str(ipOrg.network))
+    rotOrgs = tabelaClRot.get(str(ipOrg.network))
 
     # não existe classe perto para este roteador, FAZER
-    if not rotProximos:
+    if not rotOrgs:
       raise RuntimeError("Não há roteadores próximos ao roteador cliente para esta topologia de rede.")
     else:
-      for rotProximo in rotProximos:
-        geraIptables(rotProximo)
+      for rotOrg in rotOrgs:
+        try:
+          listaRotPorta = self.geraRegras(str(ipOrg.ip),listaDestino, rotOrg)
+          if listaRotPorta:
+            break
+        except RuntimeError, err:
+          sys.stderr.write('EXCEÇÃO: %s\n' % str(err))
+        except:
+          #deixa passar as outras exceções para rodar todos os rotProximos que existem
+           pass 
+    return listaRotPorta
 
-                      # vai quebrar o loop do rotProxDst
-                      break
-                    except:
-                      # para continuar no loop
-                      pass
-        # deu tudo certo, sai do loop
-      rotDestino.append([rotProximo, portaLOrg])
-      break
-    return rotDestino
+  def geraRegras(self, ipOrigem, listaDestino, rotO):
 
-  def geraIptables(self, ipOrigem, listaDestino, rotO):
-
-    rotDestino = []
+    listaRotPorta = []
     conexoes = conexoesAtuais.ConexaoAtual()
     tabelaClRot = tabClasseRot.TabelaClasseRoteador()
     # cmdRot faz comandos no roteador
@@ -61,11 +54,12 @@ class Nat:
     sshConexao = ssh.Ssh()
 
     sshRotO = sshConexao.getConexao(rotO)
-    portaLO = portaLivre.encontra(conexoes.getRoteadoresAtivos().get(rotO), sshRotO)
-    if portaLO:
-      #lista de IP destinos e porta destinos próximas
-      #para cada porta destino encontro o IP de saída próximo
-      for ipDestino, portaDst in listaDestino:
+    #lista de IP destinos e porta destinos próximas
+    #para cada porta destino encontro o IP de saída próximo
+    for ipDestino, portaDst in listaDestino:
+      #dessa maneira, todos estarão vinculados ao mesmo IP roteador próximo ao cliente e porta destino diferente
+      portaLO = portaLivre.encontra(conexoes.getRoteadoresAtivos().get(rotO), sshRotO)
+      if portaLO:
         ipDst = netaddr.IPNetwork(ipDestino)
         rotProxDsts = tabelaClRot.get(str(ipDst.network))
         if not rotProxDsts:
@@ -78,11 +72,33 @@ class Nat:
             portaLD = portaLivre.encontra(conexoes.getRoteadoresAtivos().get(rotProxDst), sshRotD)
             if portaLD:
               #adicionarConexao(ipCliente,ipRoteadorOrigem,portaRO, ipRoteadorDestino, portaRoteadorDestino, ipClienteDestino, portaClienteDestino)
-              try:
-                conexoes.adicionarConexao(str(ipOrg.ip),rotProximo,portaLO,rotProxDst, portaLD, str(ipDst.ip),portaDst)
-                # AGORA FAZER OS COMANDOS QUE ADICIONAM O COMANDO IPTABLES
-              except:
-                  raise RuntimeError("Não foi possível realizar a conexão ssh.")
-        rotDestino.append([rotProximo, portaLOrg])
-      return rotDestino
-    return []
+              conexoes.adicionarConexao(ipOrigem,rotO,portaLO,rotProxDst, portaLD, str(ipDst.ip),portaDst)
+              cmdRot.escreveRegras(ipOrigem,rotO,portaLO,rotProxDst, portaLD, str(ipDst.ip),portaDst, sshRotO, sshRotD, 1)
+              listaRotPorta.append((rotO, portaLO))
+              break
+      else:
+        return []
+    return listaRotPorta
+
+  def deletar(self,ipO, listaRotPorta):
+
+    conexoes = conexoesAtuais.ConexaoAtual()
+    cmdRot = cmdRoteador.CmdRot()
+    sshConexao = ssh.Ssh()
+
+    # sempre vai ser o mesmo rotO, mas vou fazer como se pudesse mudar
+    for rotO, portaRO in listaRotPorta:
+      #listaConexao volta nessa ordem ipO(0), rotO(1), portaRO(2), rotD(3), portaRD(4), ipD(5), portaD(6)
+      elemRede = conexoes.getRoteadorAtivo(ipO, rotO, portaRO)
+      sshRotO = sshConexao.getConexao(rotO)
+      sshRotD = sshConexao.getConexao(elemRede[3])
+      cmdRot.apagaRegras(elemRede[0],elemRede[1],elemRede[2],elemRede[3],elemRede[4],elemRede[5],elemRede[6], sshRotO, sshRotD,0)
+      conexoes.deletarConexao(ipO, rotO, portaRO)
+
+
+
+
+
+
+
+

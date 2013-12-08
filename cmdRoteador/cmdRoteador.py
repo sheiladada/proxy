@@ -21,6 +21,21 @@ class CmdRot():
     else:
       return True
 
+
+  def escreveRegras(self, ipO,rotO,portaLO,rotD, portaLD, ipD,portaD, sshO, sshD, acao):
+
+    comandoRO = ["iptables -t -nat " +  acao +  " PREROUTING -s " + ipO + " -d " + rotO + " -p tcp  --dport " + str(portaLO) + " -i $GREEN_DEV -j DNAT --to " + rotD + ":" + str(portaLD),"iptables -t -nat " + acao + " POSTROUTING -s " + ipO + " -d " + rotD + " -p tcp -o $RED_DEV -j SNAT --to-source " + rotO]
+    comandoRD = ["iptables -t -nat " +  acao +  " PREROUTING -s " + rotO + " -d " + rotD + " -p tcp  --dport " + str(portaLD) + " -i $RED_DEV -j DNAT --to " + ipD + ":" + str(portaD),"iptables -t -nat " +  acao +  " POSTROUTING -s " + rotO + " -d " + ipD + " -p tcp -o $GREEN_DEV -j SNAT --to-source " + rotD]
+
+    if acao == '-A':
+      self.insereRegras(comandoRO, sshO, rotO)
+      self.insereRegras(comandoRD, sshD, rotD)
+    else:
+      print "sheilaaaaaaaaaaaaaaaaaaaaa 1"
+      print comandoRO
+      self.apagaRegras(comandoRO, sshO, rotO)
+      self.apagaRegras(comandoRD, sshD, rotD)
+
   def insereRegras(self, comandos, ssh, rot):
 
     # comandos que irão escrever no arquivo do iptables
@@ -41,14 +56,27 @@ class CmdRot():
     ftp.put(rot, arqIptables)
     ftp.close()
 
-  def escreveRegras(self, ipO,rotO,portaLO,rotD, portaLD, ipD,portaD, sshO, sshD):
+  def apagaRegras(self, comandos, ssh, rot):
 
+    # comandos que irão escrever no arquivo do iptables
+    comandosArq = ''
     arqIptables = '/etc/rc.d/rc.local'
 
-    comandoRO = ["iptables -t -nat -A PREROUTING -s " + ipO + " -d " + rotO + " -p tcp  --dport " + str(portaLO) + " -i $GREEN_DEV -j DNAT --to " + rotD + ":" + str(portaLD), "iptables -t -nat -A POSTROUTING -s " + ipO + " -d " + rotD + " -p tcp -o $RED_DEV -j SNAT --to-source " + rotO]
-    comandoRD = ["iptables -t -nat -A PREROUTING -s " + rotO + " -d " + rotD + " -p tcp  --dport " + str(portaLD) + " -i $RED_DEV -j DNAT --to " + ipD + ":" + str(portaD), "iptables -t -nat -A POSTROUTING -s " + rotO + " -d " + ipD + " -p tcp -o $GREEN_DEV -j SNAT --to-source " + rotD]
+    for idx, comando in enumerate(comandos):
+      ssh.exec_command(comando)
+      comandos[idx]= comando.replace('iptables', '$IPT').replace('-D', '-A')
 
-    self.insereRegras(comandoRO, sshO, rotO)
-    self.insereRegras(comandoRD, sshD, rotD)
-
-
+    ftp = ssh.open_sftp()
+    ftp.get(arqIptables, rot)
+    #abrir arquivo, editar e fechar
+    arq2 = rot + '1'
+    f = open(rot, 'r')
+    g = open(arq2, 'w')
+    for line in f.readlines():
+      #if not (line.startswith(comandos[0]) and line.startswith(comandos[1])):
+      if comandos[0] not in line and comandos[1] not in line:
+        g.write(line)
+    f.close()
+    g.close()
+    ftp.put(arq2, arqIptables)
+    ftp.close()
