@@ -21,28 +21,31 @@ class CmdRot():
     else:
       return True
 
-  def insereRegras(self, ipO,rotO,portaLO,rotD, portaLD, ipD,portaD, sshO, sshD):
+  def escreveRegras(self, ipO,rotO,portaLO,rotD, portaLD, ipD,portaD, sshO, sshD):
 
     arqIptables = '/etc/rc.d/rc.local'
-    comandoRO = ["iptables -t -nat -A PREROUTING -s " + ipO + " -d " + rotO + "-p tcp  --dport " + portaLO + " -i $GREEN_DEV -j DNAT --to " + rotD + ":" + portaLD, "iptables -t -nat -A POSTROUTING -s " + ipO + " -d " + rotD + "-p tcp -o $RED_DEV -j SNAT --to-source " + rotO]
-    comandoRD = ["iptables -t -nat -A PREROUTING -s " + rotO + " -d " + rotD + "-p tcp  --dport " + portaLD + " -i $RED_DEV -j DNAT --to " + ipD + ":" + portaD, "iptables -t -nat -A POSTROUTING -s " + rotO + " -d " + ipD + "-p tcp -o $GREEN_DEV -j SNAT --to-source " + rotD]
 
-    for idx, comando in comandoRO:
+    comandoRO = ["iptables -t -nat -A PREROUTING -s " + ipO + " -d " + rotO + " -p tcp  --dport " + portaLO + " -i $GREEN_DEV -j DNAT --to " + rotD + ":" + portaLD, "iptables -t -nat -A POSTROUTING -s " + ipO + " -d " + rotD + " -p tcp -o $RED_DEV -j SNAT --to-source " + rotO]
+    comandoRD = ["iptables -t -nat -A PREROUTING -s " + rotO + " -d " + rotD + " -p tcp  --dport " + portaLD + " -i $RED_DEV -j DNAT --to " + ipD + ":" + portaD, "iptables -t -nat -A POSTROUTING -s " + rotO + " -d " + ipD + " -p tcp -o $GREEN_DEV -j SNAT --to-source " + rotD]
+
+    insereRegras(comandoRO, sshO)
+    insereRegras(comandoRD, sshD)
+
+  def insereRegras(self, comandos, ssh):
+
+    # comandos que irão escrever no arquivo do iptables
+    comandosArq = ''
+
+    for comando in comandos:
       sshO.exec_command(comando)
-      comandoRO[idx] = comando.replace('iptables', '$IPT')
+      comandoArq = comando.replace('iptables', '$IPT')
+      comandosArq = comandosArqO + '\n' + comandoArq
 
-    for idx, comando in comando RD:
-      sshD.exec_command(comando)
-      comandoRO[idx] = comando.replace('iptables', '$IPT')
-
-    ftpO = sshO.open_sftp()
-    ftpO.get(arqIptables, ipO)
+    ftp = ssh.open_sftp()
+    ftp.get(arqIptables, ipO)
     #abrir arquivo, editar e fechar
-    ftpO.put(ipO, arqIptables)
-    ftpO.close()
-	#get coloca no remoto para o local
-	#esse pega o teste local e bota la
-	#ftp.put('teste','/etc/rc.d/rc.local')
-	ftp.get('/etc/rc.d/rc.local', 'arquivo')
+    f = open(ipO,'a')
+    f.write(comandosArq)
+    f.close()
+    ftp.put(ipO, arqIptables)
     ftp.close()
-
