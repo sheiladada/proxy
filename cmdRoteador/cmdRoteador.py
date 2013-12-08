@@ -17,6 +17,8 @@ class CmdRot():
       if portaOcp:
         listaPorta.append(int(portaOcp.group(3)))
     if porta in listaPorta:
-      return True
-    else:
       return False
+    else:
+      return True
+
+  def insereRegras(self, )
