@@ -1,0 +1,45 @@
+#!/bin/sh
+#variables defined therein
+. /var/ipcop/ethernet/settings
+
+#Flush Custom Input Rules
+#Apaga todas as regras
+/sbin/iptables -F
+/sbin/iptables -F -t mangle
+/sbin/iptables -F -t nat
+
+#shorthand helper
+IPT="/sbin/iptables"
+
+#Minha regra
+
+$IPT -P FORWARD DROP
+$IPT -P OUTPUT ACCEPT
+
+#esse caso eh necessario para ping
+$IPT -A INPUT -p icmp --icmp-type echo-reply -j ACCEPT
+$IPT -A INPUT -p icmp --icmp-type echo-request -j ACCEPT
+
+$IPT -A FORWARD -i $GREEN_DEV -j ACCEPT
+
+#aceita ssh
+$IPT -A INPUT -p tcp -m tcp --dport 222 -j ACCEPT
+
+$IPT -A FORWARD -p tcp --dport 12345 -j ACCEPT
+
+#meu ip 192.168.0.69
+
+#Pacotes que saem do local e vao para o 192.168.0.31
+
+$IPT -t nat -A PREROUTING -s 10.0.0.253 -d 192.168.0.69 -p tcp -i $GREEN_DEV -j DNAT --to 192.168.0.31
+$IPT -t nat -A POSTROUTING -s 10.0.0.253 -d 192.168.0.31 -p tcp -o $RED_DEV -j SNAT --to-source 192.168.0.69
+
+#Pacotes que entram no 192.168.0.69 e vao para o local
+
+$IPT -t nat -A PREROUTING -s 192.168.0.31 -d 192.168.0.69 -p tcp -i $RED_DEV -j DNAT --to 10.0.0.253
+$IPT -t nat -A POSTROUTING -s 192.168.0.31 -d 10.0.0.153 -p tcp -o $GREEN_DEV -j SNAT --to-source 192.168.0.69
+
+iptables -t -nat -A POSTROUTING -s 10.0.0.1 -d 192.168.0.100-p tcp -o $RED_DEV -j SNAT --to-source 192.168.0.200
+
+iptables -t -nat -A PREROUTING -s 10.0.0.1 -d 192.168.0.200-p tcp  --dport 222222 -i $GREEN_DEV -j DNAT --to 192.168.0.100:44444
+iptables -t -nat -A POSTROUTING -s 10.0.0.1 -d 192.168.0.100-p tcp -o $RED_DEV -j SNAT --to-source 192.168.0.200
